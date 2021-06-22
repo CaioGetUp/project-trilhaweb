@@ -75,6 +75,7 @@ $(document).ready(function() {
 				data: JSON.stringify(produto),
 				success: function(msg) {
 					COLDIGO.exibirAviso(msg);
+					COLDIGO.produto.buscar();
 					$("#addProduto").trigger("reset");
 				},
 				error: function(info) {
