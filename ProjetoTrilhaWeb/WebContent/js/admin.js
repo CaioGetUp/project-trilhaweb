@@ -14,7 +14,7 @@ $(document).ready(function() {
 				$("section").html(msg);
 			}
 		})
-	}
+	};
 	
 	COLDIGO.exibirAviso = function(aviso) {
 		var modal = {
@@ -30,5 +30,9 @@ $(document).ready(function() {
 		};
 		$("#modalAviso").html(aviso);
 		$("#modalAviso").dialog(modal);
-	}
+	};
+	
+	COLDIGO.formatarDinheiro = function(valor) {
+		return valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+	};
 });
