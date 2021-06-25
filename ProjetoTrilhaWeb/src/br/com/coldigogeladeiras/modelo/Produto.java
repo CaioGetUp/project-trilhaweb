@@ -17,7 +17,11 @@ public class Produto implements Serializable {
 	private int capacidade;
 	
 	private float valor;
-
+	
+	public Produto() {
+		super();
+	}
+	
 	public Produto(int id, String categoria, int marcaId, String modelo, int capacidade, float valor) {
 		super();
 		

@@ -14,4 +14,5 @@ public interface ProdutoDAO {
 	
 	public boolean deletar(int id);
 	
+	public Produto buscarPorId(int id);
 }

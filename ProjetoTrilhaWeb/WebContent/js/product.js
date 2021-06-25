@@ -113,7 +113,7 @@ $(document).ready(function() {
 		"<th>Categoria</th>" +
 		"<th>Marca</th>" +
 		"<th>Modelo</th>" +
-		"<th>Cap.(1)</th>" +
+		"<th>Cap.(l)</th>" +
 		"<th>Valor</th>" +
 		"<th class='acoes'>Ações</th>" +
 		"</tr>";
@@ -127,7 +127,7 @@ $(document).ready(function() {
 						  "<td>" + listaDeProdutos[i].capacidade + "</td>" +
 						  "<td> R$ " + COLDIGO.formatarDinheiro(listaDeProdutos[i].valor) + "</td>" +
 						  "<td>" +
-						  		"<a><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
+						  		"<a onclick=\"COLDIGO.produto.exibirEdicao('" + listaDeProdutos[i].id + "')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
 						  		"<a onclick=\"COLDIGO.produto.excluir('"+ listaDeProdutos[i].id +"')\"><img src='../../imgs/delete.png' alt='Excluir registro'></a>" +
 						  "</td>" +
 						  "</tr>"
@@ -155,6 +155,20 @@ $(document).ready(function() {
 				COLDIGO.exibirAviso("Erro ao excluir produto: " + info.status + " - " + info.statusText);
 			}
 		});
-	}
+	};
+	
+	COLDIGO.produto.exibirEdicao = function(id) {
+		$.ajax({
+			type: "GET",
+			url: COLDIGO.PATH + "produto/buscarPorId",
+			data: "data="+id,
+			success: function(data){
+				
+			},
+			error: function(info) {
+				COLDIGO.exibirAviso("Erro ao buscar produto para edição: " + info.status + " - " + info.statusText);
+			}
+		});
+	};
 	
 });
