@@ -138,7 +138,8 @@ $(document).ready(function() {
 						  "<td> R$ " + COLDIGO.formatarDinheiro(listaDeProdutos[i].valor) + "</td>" +
 						  "<td>" +
 						  		"<a onclick=\"COLDIGO.produto.exibirEdicao('" + listaDeProdutos[i].id + "')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
-						  		"<a onclick=\"COLDIGO.produto.excluir('"+ listaDeProdutos[i].id +"')\"><img src='../../imgs/delete.png' alt='Excluir registro'></a>" +
+						  		"<a onclick=\"COLDIGO.produto.escolhaDeExcluir('" + listaDeProdutos[i].id + "','" + listaDeProdutos[i].categoria + "','" + listaDeProdutos[i].modelo + "')\">" +
+						  				"<img src='../../imgs/delete.png' alt='Excluir registro'></a>" +
 						  "</td>" +
 						  "</tr>"
 			}
@@ -152,6 +153,33 @@ $(document).ready(function() {
 	};
 	
 	COLDIGO.produto.buscar();
+	
+	COLDIGO.produto.escolhaDeExcluir = function(id, categoria, modelo) {
+		var modalEscolha = $("#modalEscolhaExclusao"); 
+
+		var modalEditaProduto = {
+			title: "Atenção!",
+			heigth: 350,
+			width: 550,
+			modal: true,
+			buttons: {
+				"Ok": function() {
+					$(modalEscolha).dialog("close");
+					COLDIGO.produto.excluir(id);
+				},
+				"Cancelar": function() {
+					$(this).dialog("close");							
+				}
+			}
+		};
+		
+		modalEscolha.html(
+				"<h3>Deseja continuar exclusão do produto?</h3>" +
+				"<p>Categoria: " + categoria + "</p>" +
+				"<p>Modelo: " + modelo + "</p>"
+		);
+		modalEscolha.dialog(modalEditaProduto);
+	};
 	
 	COLDIGO.produto.excluir = function(id) {
 		$.ajax({
@@ -233,7 +261,7 @@ $(document).ready(function() {
 			success: function(msg) {
 				COLDIGO.exibirAviso(msg);
 				COLDIGO.produto.buscar();
-				$("modalEditaProduto").dialog("close");
+				$("#modalEditaProduto").dialog("close");
 			},
 			error: function(info) {
 				COLDIGO.exibirAviso("Erro ao editar produto: " + info.status + " - " + info.statusText);

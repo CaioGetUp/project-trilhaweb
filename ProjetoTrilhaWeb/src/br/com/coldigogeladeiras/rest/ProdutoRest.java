@@ -47,7 +47,6 @@ public class ProdutoRest extends UtilRest {
 			}
 			
 			conec.fecharConexao();
-			
 			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,8 +66,8 @@ public class ProdutoRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 			listaProdutos = jdbcProduto.buscarPorNome(nome);
-			conec.fecharConexao();
 			
+			conec.fecharConexao();
 			return this.buildResponse(listaProdutos);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,6 +94,7 @@ public class ProdutoRest extends UtilRest {
 				msg = "Erro ao excluir produto.";
 			}
 			
+			conec.fecharConexao();
 			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,7 +117,6 @@ public class ProdutoRest extends UtilRest {
 			produto = jdbcProduto.buscarPorId(id);
 			
 			conec.fecharConexao();
-			
 			return this.buildResponse(produto);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -144,6 +143,7 @@ public class ProdutoRest extends UtilRest {
 				msg = "Erro ao alterar produto.";
 			}
 			
+			conec.fecharConexao();
 			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
