@@ -10,6 +10,17 @@ public class Marca implements Serializable {
 	
 	private String nome;
 
+	public Marca() {
+		super();
+	}
+	
+	public Marca(int id, String nome) {
+		super();
+		
+		this.id = id;
+		this.nome = nome;
+	}
+	
 	public int getId() {
 		return id;
 	}

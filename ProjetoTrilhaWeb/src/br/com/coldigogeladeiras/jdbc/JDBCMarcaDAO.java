@@ -1,13 +1,15 @@
 package br.com.coldigogeladeiras.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
-import br.com.coldigogeladeiras.modelo.Marca;
 
 public class JDBCMarcaDAO implements MarcaDAO {
 	
@@ -17,26 +19,31 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		this.conexao = conexao;
 	}
 	
-	public List<Marca> buscar() {
+	public List<JsonObject> buscar(String valorBusca) {
 		
-		String comando = "SELECT * FROM marcas";
+		String comando = "SELECT * FROM marcas ";
 		
-		List<Marca> listMarcas = new ArrayList<Marca>();
+		if (valorBusca != "") {
+			comando += "WHERE nome LIKE '%" + valorBusca + "%' ";
+		}
+
+		comando += " ORDER BY nome ASC";
 		
-		Marca marca = null;
+		List<JsonObject> listMarcas = new ArrayList<JsonObject>();
+		JsonObject marca = null;
 		
 		try {
 			Statement stmt = conexao.createStatement();
 			ResultSet rs = stmt.executeQuery(comando);
 			
 			while (rs.next()) {
-				marca = new Marca();
+				marca = new JsonObject();
 				
 				int id = rs.getInt("id");
 				String nome = rs.getString("nome");
 				
-				marca.setId(id);
-				marca.setNome(nome);
+				marca.addProperty("id", id);
+				marca.addProperty("nome", nome);
 				listMarcas.add(marca);
 			}
 		} catch (Exception e) {
@@ -44,5 +51,23 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		}
 		
 		return listMarcas;
+	}
+	
+	public boolean cadastrar(String nomeMarca) {
+		
+		String comando = "INSERT INTO marcas "
+				+ "(nome) VALUES (?)";
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setString(1, nomeMarca);
+			
+			p.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

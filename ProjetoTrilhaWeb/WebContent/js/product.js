@@ -16,6 +16,8 @@ $(document).ready(function() {
 			url: COLDIGO.PATH + "marca/buscar",
 			success: function(marcas) {
 				
+				marcas = JSON.parse(marcas);
+				
 				if (marcas != "") {
 					
 					$(select).html("");

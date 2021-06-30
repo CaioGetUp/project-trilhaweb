@@ -2,9 +2,12 @@ package br.com.coldigogeladeiras.jdbcinterface;
 
 import java.util.List;
 
-import br.com.coldigogeladeiras.modelo.Marca;
+import com.google.gson.JsonObject;
 
 public interface MarcaDAO {
 	
-	public List<Marca> buscar();
+	public List<JsonObject> buscar(String valorBusca);
+	
+	public boolean cadastrar(String nomeMarca);
+	
 }
