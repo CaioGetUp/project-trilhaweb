@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
+import br.com.coldigogeladeiras.modelo.Marca;
 
 public class JDBCMarcaDAO implements MarcaDAO {
 	
@@ -53,15 +54,17 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		return listMarcas;
 	}
 	
-	public boolean cadastrar(String nomeMarca) {
+	public boolean cadastrar(Marca marca) {
 		
 		String comando = "INSERT INTO marcas "
-				+ "(nome) VALUES (?)";
+				+ "(id, nome) VALUES (?,?)";
 		PreparedStatement p;
 		
 		try {
 			p = this.conexao.prepareStatement(comando);
-			p.setString(1, nomeMarca);
+			
+			p.setInt(1, marca.getId());
+			p.setString(2, marca.getNome());
 			
 			p.execute();
 		} catch (Exception e) {
@@ -70,4 +73,42 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		}
 		return true;
 	}
+	
+	public boolean excluir(int id) {
+		
+		String comando = "DELETE FROM marcas WHERE id = ?";
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			p.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public Marca buscarPorId(int id) {
+		String comando = "SELECT * FROM marcas WHERE marcas.id = ?";
+		Marca marca = new Marca();
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+			while (rs.next()) {
+				marca.setId(rs.getInt("id"));
+				marca.setNome(rs.getString("nome"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return marca;
+	}
+	
 }

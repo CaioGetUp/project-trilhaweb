@@ -1,7 +1,7 @@
 <script src="../../js/marcas.js"></script>
 
 <h2>Registro de Marca</h2>
-<form name="frmAddMarca" id="addMarca" class="frmInserir">
+<form name="frmAddMarca" id="addMarca" class="frmMarca">
 	<fieldset>
 		<legend>Categoria</legend>
 		<table>
@@ -29,4 +29,19 @@
 	</fieldset>
 </form>
 <div id="listaMarca" class="listaRegistros">
+</div>
+<div id="modalEditaMarca" class="modalEditar">
+	<form name="frmEditaMarca" id="editaMarca" class="frmMarca">
+		<fieldset>
+			<legend>Categoria</legend>
+			<table>
+				<tr>
+					<th>Nome</th>
+					<td>
+						<input type="text" name="nome">
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
 </div>
