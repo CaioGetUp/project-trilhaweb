@@ -88,7 +88,7 @@ $(document).ready(function() {
 					modal: true,
 					buttons: {
 						"Salvar": function() {
-							
+							COLDIGO.marca.alterarEdicao();
 						},
 						"Cancelar": function() {
 							$(this).dialog("close");							
@@ -105,7 +105,7 @@ $(document).ready(function() {
 				COLDIGO.exibirAviso("Erro ao buscar a marca: " + info.status + " - " + info.statusText);
 			}
 		});
-	}
+	};
 	
 	COLDIGO.marca.excluirMarca = function(id) {
 		
@@ -120,6 +120,25 @@ $(document).ready(function() {
 				COLDIGO.exibirAviso("Erro ao excluir a marca: " + info.status + " - " + info.statusText);
 			}
 		});
+	};
+	
+	COLDIGO.marca.alterarEdicao = function() {
 		
-	}
+		var marca = new Object();
+		marca.nome = document.frmEditaMarca.nome.value;
+		
+		$.ajax({
+			type: "PUT",
+			url: COLDIGO.PATH + "marca/alterar",
+			data: JSON.stringify(marca),
+			success: function(msg) {
+				COLDIGO.exibirAviso(msg);
+				COLDIGO.marca.buscar();
+				$("#modalEditaMarca").dialog("close");
+			},
+			error: function(info) {
+				COLDIGO.exibirAviso("Erro ao editar a marca: " + info.status + " - " + info.statusText);
+			}
+		});
+	};
 });

@@ -14,5 +14,8 @@ public interface MarcaDAO {
 	
 	public boolean excluir(int id);
 	
+	public boolean alterar(Marca marca);
+	
 	public Marca buscarPorId(int id);
+	
 }

@@ -10,6 +10,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -115,6 +116,33 @@ public class MarcaRest extends UtilRest {
 			
 			conec.fecharConexao();
 			return this.buildResponse(marca);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
+	@PUT
+	@Path("/alterar")
+	@Consumes("application/*")
+	public Response alterar(@FormParam("marca") String marcaParam) {
+		try {
+			Marca marca = new Gson().fromJson(marcaParam, Marca.class);
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			
+			boolean retorno = jdbcMarca.alterar(marca);
+			String msg = "";
+			
+			if (retorno) {
+				msg = "Marca foi alterada com sucesso!";
+			} else {
+				msg = "Erro ao alterar marca.";
+			}
+			
+			conec.fecharConexao();
+			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());

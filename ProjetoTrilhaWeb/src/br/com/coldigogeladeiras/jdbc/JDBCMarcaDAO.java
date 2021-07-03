@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
 import br.com.coldigogeladeiras.modelo.Marca;
+import br.com.coldigogeladeiras.modelo.Produto;
 
 public class JDBCMarcaDAO implements MarcaDAO {
 	
@@ -109,6 +110,24 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		}
 		
 		return marca;
+	}
+	
+	public boolean alterar(Marca marca) {
+		String comando = "UPDATE marcas SET nome=? WHERE id=?";
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			
+			p.setString(1, marca.getNome());
+			p.setInt(1, marca.getId());
+			
+			p.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 }
