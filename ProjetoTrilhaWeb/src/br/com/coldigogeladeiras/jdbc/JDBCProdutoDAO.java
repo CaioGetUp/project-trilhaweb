@@ -159,4 +159,20 @@ public class JDBCProdutoDAO implements ProdutoDAO {
 		}
 		return true;
 	}
+	
+	public boolean buscarMarca(int id) {
+		String comando = "SELECT * FROM produtos WHERE produtos.marcas_id = ?";
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			
+			p.setInt(1, id);
+			
+			return p.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

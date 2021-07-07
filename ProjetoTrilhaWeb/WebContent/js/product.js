@@ -82,18 +82,33 @@ $(document).ready(function() {
 			COLDIGO.exibirAviso("Preencha todos os campos!");
 		} else {
 			$.ajax({
-				type: "POST",
-				url: COLDIGO.PATH + "produto/inserir",
-				data: JSON.stringify(produto),
-				success: function(msg) {
-					COLDIGO.exibirAviso(msg);
-					COLDIGO.produto.buscar();
-					$("#addProduto").trigger("reset");
+				type: "GET",
+				url: COLDIGO.PATH + "marca/buscarPorId",
+				data: "id=" + produto.marcaId,
+				success: function(marca) {
+					if (marca) {
+						$.ajax({
+							type: "POST",
+							url: COLDIGO.PATH + "produto/inserir",
+							data: JSON.stringify(produto),
+							success: function(msg) {
+								COLDIGO.exibirAviso(msg);
+								COLDIGO.produto.buscar();
+								$("#addProduto").trigger("reset");
+							},
+							error: function(info) {
+								COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: " + info.status + " - " + info.statusText);
+							}
+						});
+					} else {
+						COLDIGO.exibirAviso("Marca não existe, para criar produto é necessário inserir somente marcas válidas.");
+						COLDIGO.carregaPagina('marcas');
+					}
 				},
 				error: function(info) {
-					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: " + info.status + " - " + info.statusText);
+					
 				}
-			})
+			});
 		}
 	};
 	

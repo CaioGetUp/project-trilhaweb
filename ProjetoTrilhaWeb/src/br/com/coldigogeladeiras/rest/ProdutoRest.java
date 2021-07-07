@@ -151,4 +151,22 @@ public class ProdutoRest extends UtilRest {
 		}
 	}
 	
+	@GET
+	@Path("/buscarMarcaPorId/{id}")
+	@Produces("application/*")
+	public Response buscarMarcaPorId(@PathParam("id") int id) {
+		try {
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
+			
+			boolean retorno = jdbcProduto.buscarMarca(id);
+			
+			conec.fecharConexao();
+			return this.buildResponse(retorno);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
 }
