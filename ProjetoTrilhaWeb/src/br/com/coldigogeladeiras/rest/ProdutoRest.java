@@ -151,9 +151,10 @@ public class ProdutoRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/buscarMarcaPorId/{id}")
+	@Path("/buscarMarcaPorId")
 	@Produces("application/*")
-	public Response buscarMarcaPorId(@PathParam("id") int id) {
+	@Consumes("application/*")
+	public Response buscarMarcaPorId(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();

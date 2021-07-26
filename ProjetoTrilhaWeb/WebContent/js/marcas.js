@@ -111,7 +111,8 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: "GET",
-			url: COLDIGO.PATH + "produto/buscarMarcaPorId/" + id,
+			url: COLDIGO.PATH + "produto/buscarMarcaPorId",
+			data: "id=" + id,
 			success: function(data) {
 				data = JSON.parse(data);
 				
