@@ -103,9 +103,27 @@ public class MarcaRest extends UtilRest {
 	}
 	
 	@GET
+	@Path("/existeMarca/{id}")
+	@Produces("application/*")
+	public Response verificarMarca(@PathParam("id") int id) {
+		try {
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			boolean marcaExistente = (jdbcMarca.buscarPorId(id) != null);
+			
+			conec.fecharConexao();
+			return this.buildResponse(marcaExistente);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
+	@GET
 	@Path("/buscarPorId")
 	@Consumes("application/*")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/*")
 	public Response buscarPorId(@QueryParam("id") int id) {
 		try {
 			Marca marca = new Marca();

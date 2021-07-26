@@ -17,4 +17,6 @@ public interface ProdutoDAO {
 	public Produto buscarPorId(int id);
 	
 	public boolean alterar(Produto produto);
+	
+	public boolean buscarPorMarca(int id);
 }

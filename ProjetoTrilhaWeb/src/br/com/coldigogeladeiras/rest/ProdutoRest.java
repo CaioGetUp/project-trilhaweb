@@ -58,7 +58,6 @@ public class ProdutoRest extends UtilRest {
 	@Path("/buscar")
 	@Consumes("application/*")
 	public Response buscarPorNome(@QueryParam("valorBusca") String nome) {
-		
 		try {
 			List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
 			
@@ -145,6 +144,24 @@ public class ProdutoRest extends UtilRest {
 			
 			conec.fecharConexao();
 			return this.buildResponse(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
+	@GET
+	@Path("/validaMarca/{id}")
+	@Produces("application/*")
+	public Response validaMarca(@PathParam("id") int id) {
+		try {
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
+			boolean marcaUtilizada = jdbcProduto.buscarPorMarca(id);
+			
+			conec.fecharConexao();
+			return this.buildResponse(marcaUtilizada);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());

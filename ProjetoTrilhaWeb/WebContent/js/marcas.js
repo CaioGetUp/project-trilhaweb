@@ -110,14 +110,24 @@ $(document).ready(function() {
 	COLDIGO.marca.excluirMarca = function(id) {
 		
 		$.ajax({
-			type: "DELETE",
-			url: COLDIGO.PATH + "marca/excluir/" + id,
-			success: function(msg) {
-				COLDIGO.exibirAviso(msg);
-				COLDIGO.marca.buscar();
-			},
-			error: function(info) {
-				COLDIGO.exibirAviso("Erro ao excluir a marca: " + info.status + " - " + info.statusText);
+			type: "GET",
+			url: COLDIGO.PATH + "produto/validaMarca/" + id,
+			success: function(valida) {
+				if (valida) {
+					$.ajax({
+						type: "DELETE",
+						url: COLDIGO.PATH + "marca/excluir/" + id,
+						success: function(msg) {
+							COLDIGO.exibirAviso(msg);
+							COLDIGO.marca.buscar();
+						},
+						error: function(info) {
+							COLDIGO.exibirAviso("Erro ao excluir a marca: " + info.status + " - " + info.statusText);
+						}
+					});
+				} else {
+					COLDIGO.exibirAviso("Marca não pode ser excluída pois está sendo utilizada em um produto.");
+				}
 			}
 		});
 	};

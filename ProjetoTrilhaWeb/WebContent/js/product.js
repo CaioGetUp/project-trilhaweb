@@ -75,25 +75,43 @@ $(document).ready(function() {
 		produto.marcaId = document.frmAddProduto.marcaId.value;
 		produto.modelo = document.frmAddProduto.modelo.value;
 		produto.capacidade = document.frmAddProduto.capacidade.value;
-		produto.valor = document.frmAddProduto.valor.value;
+		produto.valor = document.frmAddProduto.valor.value.replace(",", ".");
 		
-		if ((produto.categoria == "") || (produto.marcaId == "") || (produto.modelo == "") 
-				|| (produto.capacidade == "") || (produto.valor == "")) {
-			COLDIGO.exibirAviso("Preencha todos os campos!");
+		var rg = new RegExp("(([0-9]{1,5})|(([0-9]{1,5})[\.]([0-9]{1,2})))");
+		
+		if (rg.test(produto.valor)) {
+			COLDIGO.exibirAviso("Campo valor deve ser preenchido com a formatação correta. \n Exemplo: 00000,00 ou 00000!");
 		} else {
-			$.ajax({
-				type: "POST",
-				url: COLDIGO.PATH + "produto/inserir",
-				data: JSON.stringify(produto),
-				success: function(msg) {
-					COLDIGO.exibirAviso(msg);
-					COLDIGO.produto.buscar();
-					$("#addProduto").trigger("reset");
-				},
-				error: function(info) {
-					COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: " + info.status + " - " + info.statusText);
-				}
-			})
+			if ((produto.categoria == "") || (produto.marcaId == "") || (produto.modelo == "") 
+					|| (produto.capacidade == "")) {
+				COLDIGO.exibirAviso("Preencha todos os campos!");
+			} else {
+				$.ajax({
+					type: "GET",
+					url: COLDIGO.PATH + "marca/existeMarca/" + produto.marcaId,
+					success: function(verificado) {
+						if (verificado) {
+							$.ajax({
+								type: "POST",
+								url: COLDIGO.PATH + "produto/inserir",
+								data: JSON.stringify(produto),
+								success: function(msg) {
+									COLDIGO.exibirAviso(msg);
+									COLDIGO.produto.buscar();
+									$("#addProduto").trigger("reset");
+								},
+								error: function(info) {
+									COLDIGO.exibirAviso("Erro ao cadastrar um novo produto: " + info.status + " - " + info.statusText);
+								}
+							});
+						} else {
+							COLDIGO.exibirAviso("Marca inserida para cadastrar produto não existe!");
+						}
+					},
+					
+				});
+				
+			}
 		}
 	};
 	
