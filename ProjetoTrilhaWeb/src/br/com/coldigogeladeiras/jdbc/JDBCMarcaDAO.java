@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 
 import br.com.coldigogeladeiras.jdbcinterface.MarcaDAO;
 import br.com.coldigogeladeiras.modelo.Marca;
-import br.com.coldigogeladeiras.modelo.Produto;
 
 public class JDBCMarcaDAO implements MarcaDAO {
 	

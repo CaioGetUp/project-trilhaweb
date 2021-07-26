@@ -151,14 +151,14 @@ public class ProdutoRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/validaMarca/{id}")
+	@Path("/buscarMarcaPorId/{id}")
 	@Produces("application/*")
-	public Response validaMarca(@PathParam("id") int id) {
+	public Response buscarMarcaPorId(@PathParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			boolean marcaUtilizada = jdbcProduto.buscarPorMarca(id);
+			boolean marcaUtilizada = jdbcProduto.buscarMarca(id);
 			
 			conec.fecharConexao();
 			return this.buildResponse(marcaUtilizada);
@@ -167,5 +167,4 @@ public class ProdutoRest extends UtilRest {
 			return this.buildErrorResponse(e.getMessage());
 		}
 	}
-	
 }

@@ -160,15 +160,16 @@ public class JDBCProdutoDAO implements ProdutoDAO {
 		return true;
 	}
 	
-	public boolean buscarPorMarca(int id) {
+	public boolean buscarMarca(int id) {
 		String comando = "SELECT * FROM produtos WHERE produtos.marcas_id = ?";
+		PreparedStatement p;
 		
 		try {
-			PreparedStatement p = this.conexao.prepareStatement(comando);
-			p.setInt(1, id);
-			ResultSet rs = p.executeQuery();
+			p = this.conexao.prepareStatement(comando);
 			
-			return (rs != null);
+			p.setInt(1, id);
+			
+			return p.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

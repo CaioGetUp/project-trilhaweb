@@ -111,9 +111,14 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: "GET",
-			url: COLDIGO.PATH + "produto/validaMarca/" + id,
-			success: function(valida) {
-				if (valida) {
+			url: COLDIGO.PATH + "produto/buscarMarcaPorId/" + id,
+			success: function(data) {
+				data = JSON.parse(data);
+				
+				if (data.valorEncontrado) {
+					COLDIGO.exibirAviso("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
+					COLDIGO.carregaPagina('product');
+				} else {
 					$.ajax({
 						type: "DELETE",
 						url: COLDIGO.PATH + "marca/excluir/" + id,
@@ -125,9 +130,10 @@ $(document).ready(function() {
 							COLDIGO.exibirAviso("Erro ao excluir a marca: " + info.status + " - " + info.statusText);
 						}
 					});
-				} else {
-					COLDIGO.exibirAviso("Marca não pode ser excluída pois está sendo utilizada em um produto.");
 				}
+			},
+			error: function(info) {
+				COLDIGO.exibirAviso("Erro buscar marca em produtos: " + info.status + " - " + info.statusText);
 			}
 		});
 	};
