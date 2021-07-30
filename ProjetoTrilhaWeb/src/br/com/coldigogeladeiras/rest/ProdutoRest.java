@@ -103,8 +103,7 @@ public class ProdutoRest extends UtilRest {
 	
 	@GET
 	@Path("/buscarPorId")
-	@Consumes("application/*")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/*")
 	public Response buscarPorId(@QueryParam("id") int id) {
 		
 		try {
@@ -153,7 +152,6 @@ public class ProdutoRest extends UtilRest {
 	@GET
 	@Path("/buscarMarcaPorId")
 	@Produces("application/*")
-	@Consumes("application/*")
 	public Response buscarMarcaPorId(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();

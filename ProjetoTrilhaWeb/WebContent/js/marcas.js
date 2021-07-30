@@ -108,7 +108,6 @@ $(document).ready(function() {
 	};
 	
 	COLDIGO.marca.excluirMarca = function(id) {
-		
 		$.ajax({
 			type: "GET",
 			url: COLDIGO.PATH + "produto/buscarMarcaPorId",
