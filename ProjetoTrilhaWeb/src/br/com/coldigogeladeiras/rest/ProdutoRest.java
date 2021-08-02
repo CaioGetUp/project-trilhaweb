@@ -13,7 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
@@ -76,7 +75,7 @@ public class ProdutoRest extends UtilRest {
 	
 	@DELETE
 	@Path("/excluir/{id}")
-	@Consumes("application/*")
+	@Produces("application/*")
 	public Response excluir(@PathParam("id") int id) {
 		
 		try {
@@ -103,8 +102,7 @@ public class ProdutoRest extends UtilRest {
 	
 	@GET
 	@Path("/buscarPorId")
-	@Consumes("application/*")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/*")
 	public Response buscarPorId(@QueryParam("id") int id) {
 		
 		try {
@@ -151,15 +149,15 @@ public class ProdutoRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/buscarMarcaPorId")
+	@Path("/validaMarca/{marcaId}")
 	@Produces("application/*")
-	@Consumes("application/*")
-	public Response buscarMarcaPorId(@QueryParam("id") int id) {
+	public Response validaMarca(@PathParam("marcaId") int marcaId) {
+		
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			boolean marcaUtilizada = jdbcProduto.buscarMarca(id);
+			boolean marcaUtilizada = jdbcProduto.buscarMarca(marcaId);
 			
 			conec.fecharConexao();
 			return this.buildResponse(marcaUtilizada);
