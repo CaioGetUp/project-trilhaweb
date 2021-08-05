@@ -50,7 +50,6 @@ $(document).ready(function() {
 		var tabela = "<table>" +
 				"<tr>" +
 				"	<th>Nome da Marca</th>" +
-				"	<th>Status</th>" +
 				"	<th>Ações</th>" +
 				"</tr>";
 		
@@ -58,7 +57,6 @@ $(document).ready(function() {
 			for (var i = 0; i < listaDeMarcas.length; i++) {
 				tabela += "<tr>" +
 					"<td>" + listaDeMarcas[i].nome + "</td>" +
-					"<td>" + listaDeMarcas[i].status + "</td>" +
 					"<td align='center'>" +
 						"<a><img onclick=\"COLDIGO.marca.exibirMarca(" + listaDeMarcas[i].id + ")\" src='../../imgs/edit.png' alt='Editar registro'></a>" +
 						"<a><img onclick=\"COLDIGO.marca.excluirMarca(" + listaDeMarcas[i].id + ")\" src='../../imgs/delete.png' alt='Excluir registro'></a>" +
@@ -112,9 +110,12 @@ $(document).ready(function() {
 	COLDIGO.marca.excluirMarca = function(id) {
 		$.ajax({
 			type: "GET",
-			url: COLDIGO.PATH + "produto/validaMarca/"+ id,
+			url: COLDIGO.PATH + "produto/buscarMarcaPorId",
+			data: "id=" + id,
 			success: function(data) {
-				if (data) {
+				data = JSON.parse(data);
+				
+				if (data.valorEncontrado) {
 					COLDIGO.exibirAviso("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
 					COLDIGO.carregaPagina('product');
 				} else {

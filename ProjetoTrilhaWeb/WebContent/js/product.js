@@ -77,9 +77,11 @@ $(document).ready(function() {
 		produto.capacidade = document.frmAddProduto.capacidade.value;
 		produto.valor = document.frmAddProduto.valor.value.replace(",", ".");
 		
-		var rg = new RegExp("^([0-9]{1,5}|([0-9]{1,5}[\.][0-9]{1,2}))$");
+		var rg = new RegExp("(([0-9]{1,5})|(([0-9]{1,5})[\.]([0-9]{1,2})))");
 		
-		if (rg.test(produto.valor) && produto.categoria != "" && produto.marcaId != "" && produto.modelo != "" && produto.capacidade != "") {
+		if (rg.test(produto.valor)) {
+			COLDIGO.exibirAviso("Campo valor deve ser preenchido com a formatação correta. \n Exemplo: 00000,00 ou 00000!");
+		} else {
 			$.ajax({
 				type: "GET",
 				url: COLDIGO.PATH + "marca/buscarPorId",
@@ -108,8 +110,6 @@ $(document).ready(function() {
 					
 				}
 			});
-		} else {
-			COLDIGO.exibirAviso("Necessário preencher todos os campos e o campo de valor deve ser preenchido com a formatação correta. \n Exemplo: 00000,00 ou 00000!");
 		}
 	};
 	
@@ -272,9 +272,11 @@ $(document).ready(function() {
 		produto.capacidade = document.frmEditaProduto.capacidade.value;
 		produto.valor = document.frmEditaProduto.valor.value;
 		
-		var rg = new RegExp("^([0-9]{1,5}|([0-9]{1,5}[\.][0-9]{1,2}))$");
+		var rg = new RegExp("(([0-9]{1,5})|(([0-9]{1,5})[\.]([0-9]{1,2})))");
 		
-		if (rg.test(produto.valor) && produto.categoria != "" && produto.marcaId != "" && produto.modelo != "" && produto.capacidade != "") {
+		if (rg.test(produto.valor)) {
+			COLDIGO.exibirAviso("Para que possa alterar, deve-se seguir a formatação correta. \n Exemplo: 00000,00 ou 00000!");
+		} else {
 			$.ajax({
 				type: "PUT",
 				url: COLDIGO.PATH + "produto/alterar",
@@ -288,8 +290,6 @@ $(document).ready(function() {
 					COLDIGO.exibirAviso("Erro ao editar produto: " + info.status + " - " + info.statusText);
 				}
 			});
-		} else {
-			COLDIGO.exibirAviso("Para que possa alterar, deve-se seguir a formatação correta. \n Exemplo: 00000,00 ou 00000!");
 		}
 	};
 	

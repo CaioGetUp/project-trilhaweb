@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
@@ -75,7 +76,7 @@ public class ProdutoRest extends UtilRest {
 	
 	@DELETE
 	@Path("/excluir/{id}")
-	@Produces("application/*")
+	@Consumes("application/*")
 	public Response excluir(@PathParam("id") int id) {
 		
 		try {
@@ -149,15 +150,14 @@ public class ProdutoRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/validaMarca/{marcaId}")
+	@Path("/buscarMarcaPorId")
 	@Produces("application/*")
-	public Response validaMarca(@PathParam("marcaId") int marcaId) {
-		
+	public Response buscarMarcaPorId(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			boolean marcaUtilizada = jdbcProduto.buscarMarca(marcaId);
+			boolean marcaUtilizada = jdbcProduto.buscarMarca(id);
 			
 			conec.fecharConexao();
 			return this.buildResponse(marcaUtilizada);
