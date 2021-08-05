@@ -113,9 +113,7 @@ $(document).ready(function() {
 			url: COLDIGO.PATH + "produto/buscarMarcaPorId",
 			data: "id=" + id,
 			success: function(data) {
-				data = JSON.parse(data);
-				
-				if (data.valorEncontrado) {
+				if (data) {
 					COLDIGO.exibirAviso("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
 					COLDIGO.carregaPagina('product');
 				} else {

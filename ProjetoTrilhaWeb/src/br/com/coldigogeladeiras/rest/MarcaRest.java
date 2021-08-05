@@ -102,14 +102,14 @@ public class MarcaRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/existeMarca/{id}")
+	@Path("/verificaMarca")
 	@Produces("application/*")
-	public Response verificarMarca(@PathParam("id") int id) {
+	public Response verificaMarca(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			boolean marcaExistente = (jdbcMarca.buscarPorId(id) != null);
+//			boolean marcaExistente = jdbcMarca.verificaMarca(id);
 			
 			conec.fecharConexao();
 			return this.buildResponse(marcaExistente);

@@ -129,4 +129,20 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		return true;
 	}
 	
+	public boolean verificaMarca
+	
+	public boolean verificaMarca(int id) {
+		String comando = "SELECT * FROM marcas WHERE marcas.id = ?";
+		PreparedStatement p;
+		
+		try {
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			return p.executeQuery().next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 }
