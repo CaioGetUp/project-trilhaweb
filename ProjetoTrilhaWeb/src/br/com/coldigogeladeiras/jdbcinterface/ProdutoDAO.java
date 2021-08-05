@@ -19,4 +19,7 @@ public interface ProdutoDAO {
 	public boolean alterar(Produto produto);
 	
 	public boolean buscarMarca(int id);
+	
+	public boolean validaDuplicidade(Produto produto, boolean alterar);
+	
 }

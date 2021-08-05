@@ -173,4 +173,22 @@ public class JDBCProdutoDAO implements ProdutoDAO {
 			return false;
 		}
 	}
+	
+	public boolean validaDuplicidade(Produto produto, boolean alterar) {
+		String comando = "SELECT * FROM produtos WHERE ";
+				if (alterar) {
+					comando += "id <> " + produto.getId();
+				}
+				comando += " LOWER(categoria) LIKE " + produto.getCategoria().toLowerCase()
+							+ " AND LOWER(categoria) LIKE " + produto.getModelo().toLowerCase()
+							+ " AND marcas_id = " + produto.getMarcaId();
+		
+		try {
+			Statement stmt = conexao.createStatement();
+			return stmt.executeQuery(comando).next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

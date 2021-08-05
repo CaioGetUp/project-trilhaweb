@@ -179,7 +179,7 @@ $(document).ready(function() {
 			},
 			error: function(info) {
 				checkbox.checked=!checkbox.checked;
-				COLDIGO.exibirAviso("Erro ao editar a marca: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso(info.message);
 			}
 		});
 	};

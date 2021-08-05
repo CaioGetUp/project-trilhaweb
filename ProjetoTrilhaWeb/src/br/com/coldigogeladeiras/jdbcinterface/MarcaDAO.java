@@ -23,4 +23,6 @@ public interface MarcaDAO {
 	public boolean existeMarca(int id);
 	
 	public boolean alterarStatus(int id, int status);
+	
+	public boolean validarDuplicidade(Marca marca, boolean alterar);
 }

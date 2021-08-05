@@ -78,13 +78,17 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			boolean retorno = jdbcMarca.cadastrar(marca);
 			String msg = "";
-			
-			if (retorno) {
-				msg = "Marca foi salva com sucesso!";
+			if (jdbcMarca.validarDuplicidade(marca, false)) {
+				msg = "Já existe uma marca registrada com este nome!";
 			} else {
-				msg = "Erro ao cadastrar marca.";
+				boolean retorno = jdbcMarca.cadastrar(marca);
+
+				if (retorno) {
+					msg = "Marca foi salva com sucesso!";
+				} else {
+					msg = "Erro ao cadastrar marca.";
+				}
 			}
 			
 			conec.fecharConexao();
@@ -169,13 +173,17 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			boolean retorno = jdbcMarca.alterar(marca);
 			String msg = "";
-			
-			if (retorno) {
-				msg = "Marca foi alterada com sucesso!";
+			if (jdbcMarca.validarDuplicidade(marca, true)) {
+				msg = "Não foi possível alterar, já existe uma marca com o mesmo nome. ";
 			} else {
-				msg = "Erro ao alterar marca.";
+				boolean retorno = jdbcMarca.alterar(marca);
+				
+				if (retorno) {
+					msg = "Marca foi alterada com sucesso!";
+				} else {
+					msg = "Erro ao alterar marca.";
+				}
 			}
 			
 			conec.fecharConexao();
@@ -195,13 +203,17 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			boolean retorno = jdbcMarca.alterarStatus(id, status);
 			String msg = "";
-			
-			if (retorno) {
-				msg = "Status da marca foi alterada com sucesso!";
+			if (jdbcMarca.validarDuplicidade(jdbcMarca.buscarPorId(id), true)) {
+				return this.buildErrorResponse("Não foi possível alterar o status, já existe marca com o mesmo nome ativa, para poder ativar exclua marca com o mesmo nome");
 			} else {
-				msg = "Erro ao alterar status da marca.";
+				boolean retorno = jdbcMarca.alterarStatus(id, status);
+				
+				if (retorno) {
+					msg = "Status da marca foi alterada com sucesso!";
+				} else {
+					msg = "Erro ao alterar status da marca.";
+				}
 			}
 			
 			conec.fecharConexao();

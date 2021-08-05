@@ -179,4 +179,19 @@ public class JDBCMarcaDAO implements MarcaDAO {
 		return true;
 	}
 	
+	public boolean validarDuplicidade(Marca marca, boolean alterar) {
+		String comando = "SELECT * FROM marcas WHERE ";
+				if (alterar) {
+					comando +=  "id <> " + marca.getId();
+				}
+				comando += " LOWER(nome) LIKE " + marca.getNome().toLowerCase() + " AND status = 1";
+					
+		try {
+			Statement stmt = conexao.createStatement();
+			return stmt.executeQuery(comando).next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

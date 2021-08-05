@@ -34,15 +34,19 @@ public class ProdutoRest extends UtilRest {
 			Produto produto = new Gson().fromJson(produtoParam, Produto.class);
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
-			
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			boolean retorno = jdbcProduto.inserir(produto);
+
 			String msg = "";
-			
-			if (retorno) {
-				msg = "Produto cadastrado com sucesso!";
+			if (jdbcProduto.validaDuplicidade(produto, false)) {
+				msg = "Produto no qual esteja tentando inserir já possui informações similares cadastrado. (Categoria, Marca e Modelo)";
 			} else {
-				msg = "Erro ao cadastrar produto.";
+				boolean retorno = jdbcProduto.inserir(produto);
+				
+				if (retorno) {
+					msg = "Produto cadastrado com sucesso!";
+				} else {
+					msg = "Erro ao cadastrar produto.";
+				}
 			}
 			
 			conec.fecharConexao();
@@ -130,14 +134,19 @@ public class ProdutoRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 			
-			boolean retorno = jdbcProduto.alterar(produto);
 			String msg = "";
-			
-			if (retorno) {
-				msg = "Produto alterado com sucesso!";
+			if (jdbcProduto.validaDuplicidade(produto, true)) {
+				msg = "Não é possível alterar, pois já existe um produto com as mesmas informações!";
 			} else {
-				msg = "Erro ao alterar produto.";
+				boolean retorno = jdbcProduto.alterar(produto);
+				
+				if (retorno) {
+					msg = "Produto alterado com sucesso!";
+				} else {
+					msg = "Erro ao alterar produto.";
+				}
 			}
+			
 			
 			conec.fecharConexao();
 			return this.buildResponse(msg);
