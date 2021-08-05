@@ -84,7 +84,7 @@ $(document).ready(function() {
 		} else {
 			$.ajax({
 				type: "GET",
-				url: COLDIGO.PATH + "marca/existeMarca" ,
+				url: COLDIGO.PATH + "marca/buscarPorId",
 				data: "id=" + produto.marcaId,
 				success: function(marca) {
 					if (marca) {
@@ -249,6 +249,9 @@ $(document).ready(function() {
 							$(this).dialog("close");							
 						}
 					},
+					close: function() {
+						
+					}
 				};
 				
 				$("#modalEditaProduto").dialog(modalEditaProduto);

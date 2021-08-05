@@ -166,8 +166,10 @@ public class JDBCProdutoDAO implements ProdutoDAO {
 		
 		try {
 			p = this.conexao.prepareStatement(comando);
+			
 			p.setInt(1, id);
-			return p.executeQuery().next();
+			
+			return p.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

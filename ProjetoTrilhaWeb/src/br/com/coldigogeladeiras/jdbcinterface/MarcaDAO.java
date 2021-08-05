@@ -18,6 +18,4 @@ public interface MarcaDAO {
 	
 	public Marca buscarPorId(int id);
 	
-	public boolean verificaMarca(int id);
-	
 }
