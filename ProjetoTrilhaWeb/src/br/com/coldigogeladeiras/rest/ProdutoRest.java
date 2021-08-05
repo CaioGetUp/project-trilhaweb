@@ -13,7 +13,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
@@ -56,7 +55,7 @@ public class ProdutoRest extends UtilRest {
 	
 	@GET
 	@Path("/buscar")
-	@Consumes("application/*")
+	@Produces("application/*")
 	public Response buscarPorNome(@QueryParam("valorBusca") String nome) {
 		try {
 			List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
@@ -76,9 +75,8 @@ public class ProdutoRest extends UtilRest {
 	
 	@DELETE
 	@Path("/excluir/{id}")
-	@Consumes("application/*")
+	@Produces("application/*")
 	public Response excluir(@PathParam("id") int id) {
-		
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
@@ -150,9 +148,9 @@ public class ProdutoRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/buscarMarcaPorId")
+	@Path("/marcaUtilizada")
 	@Produces("application/*")
-	public Response buscarMarcaPorId(@QueryParam("id") int id) {
+	public Response marcaUtilizada(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();

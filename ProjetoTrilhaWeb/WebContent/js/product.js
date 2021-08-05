@@ -13,21 +13,19 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: "GET",
-			url: COLDIGO.PATH + "marca/buscar",
+			url: COLDIGO.PATH + "marca/buscarAtivos",
 			success: function(marcas) {
-				
 				marcas = JSON.parse(marcas);
 				
 				if (marcas != "") {
-					
 					$(select).html("");
+					
 					var option = document.createElement("option");
 					option.setAttribute("value", "");
 					option.innerHTML = ("Escolha");
 					$(select).append(option);
 					
 					for (var i = 0; i < marcas.length; i++) {
-						
 						var option = document.createElement("option");
 						option.setAttribute("value", marcas[i].id);
 						
@@ -36,32 +34,29 @@ $(document).ready(function() {
 							
 						option.innerHTML = (marcas[i].nome);
 						$(select).append(option);
-					
 					}
 					
 				} else {
-					
 					$(select).html("");
 					var option = document.createElement("option");
 					option.setAttribute("value", "");
 					option.innerHTML = ("Erro ao carregar marcas!");
 					$(select).append(option);
 					$(select).addClass("aviso");
-					
 				}
 				
 			},
 			error: function(info) {
-				
 				COLDIGO.exibirAviso("Erro ao buscar as marcas: " + info.status + " - " + info.statusText);
+				console.log(info);
 				
 				$(select).html("");
 				var option = document.createElement("option");
 				option.setAttribute("value", "");
 				option.innerHTML = ("Erro ao carregar marcas!");
+				
 				$(select).append(option);
 				$(select).addClass("aviso");
-				
 			}
 		});
 	};
@@ -69,7 +64,6 @@ $(document).ready(function() {
 	COLDIGO.produto.carregarMarcas();
 	
 	COLDIGO.produto.cadastrar = function() {
-		
 		var produto = new Object();
 		produto.categoria = document.frmAddProduto.categoria.value;
 		produto.marcaId = document.frmAddProduto.marcaId.value;
@@ -77,17 +71,15 @@ $(document).ready(function() {
 		produto.capacidade = document.frmAddProduto.capacidade.value;
 		produto.valor = document.frmAddProduto.valor.value.replace(",", ".");
 		
-		var rg = new RegExp("(([0-9]{1,5})|(([0-9]{1,5})[\.]([0-9]{1,2})))");
+		var rg = new RegExp("^(([0-9]{1,5})|([0-9]{1,5}[\.][0-9]{1,2}))$");
 		
 		if (rg.test(produto.valor)) {
-			COLDIGO.exibirAviso("Campo valor deve ser preenchido com a formatação correta. \n Exemplo: 00000,00 ou 00000!");
-		} else {
 			$.ajax({
 				type: "GET",
-				url: COLDIGO.PATH + "marca/buscarPorId",
+				url: COLDIGO.PATH + "marca/existeMarca",
 				data: "id=" + produto.marcaId,
 				success: function(marca) {
-					if (marca) {
+					if (Boolean.call(marca)) {
 						$.ajax({
 							type: "POST",
 							url: COLDIGO.PATH + "produto/inserir",
@@ -103,13 +95,14 @@ $(document).ready(function() {
 						});
 					} else {
 						COLDIGO.exibirAviso("Marca não existe, para criar produto é necessário inserir somente marcas válidas.");
-						COLDIGO.carregaPagina('marcas');
 					}
 				},
 				error: function(info) {
 					
 				}
 			});
+		} else {
+			COLDIGO.exibirAviso("Campo valor deve ser preenchido com a formatação correta. \n Exemplo: 00000,00 ou 00000!");
 		}
 	};
 	
@@ -122,11 +115,9 @@ $(document).ready(function() {
 			url: COLDIGO.PATH + "produto/buscar",
 			data: "valorBusca="+valorBusca,
 			success: function(dados) {
-				
 				dados = JSON.parse(dados);
 				
 				$("#listaProdutos").html(COLDIGO.produto.exibir(dados));
-				
 			},
 			error: function(info) {
 				COLDIGO.exibirAviso("Erro ao consultar os contatos: " + info.status + " - " + info.statusText);
@@ -135,7 +126,6 @@ $(document).ready(function() {
 	};
 	
 	COLDIGO.produto.exibir = function(listaDeProdutos) {
-		
 		var tabela = "<table>" +
 		"<tr>" +
 		"<th>Categoria</th>" +
@@ -219,6 +209,7 @@ $(document).ready(function() {
 			url: COLDIGO.PATH + "produto/buscarPorId",
 			data: "id="+id,
 			success: function(produto){
+				produto = JSON.parse(produto);
 				
 				document.frmEditaProduto.idProduto.value = produto.id;
 				document.frmEditaProduto.modelo.value = produto.modelo;
@@ -272,7 +263,7 @@ $(document).ready(function() {
 		produto.capacidade = document.frmEditaProduto.capacidade.value;
 		produto.valor = document.frmEditaProduto.valor.value;
 		
-		var rg = new RegExp("(([0-9]{1,5})|(([0-9]{1,5})[\.]([0-9]{1,2})))");
+		var rg = new RegExp("^(([0-9]{1,5})|([0-9]{1,5}[\.][0-9]{1,2}))$");
 		
 		if (rg.test(produto.valor)) {
 			COLDIGO.exibirAviso("Para que possa alterar, deve-se seguir a formatação correta. \n Exemplo: 00000,00 ou 00000!");

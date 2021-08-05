@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -29,7 +28,7 @@ public class MarcaRest extends UtilRest {
 	
 	@GET
 	@Path("/buscar")
-	@Consumes("application/*")
+	@Produces("application/*")
 	public Response buscar(@DefaultValue("") @QueryParam("valorBusca") String valorBusca) {
 		try {
 			List<JsonObject> listaMarcas = new ArrayList<JsonObject>();
@@ -48,10 +47,31 @@ public class MarcaRest extends UtilRest {
 		}
 	}
 	
+	@GET
+	@Path("/buscarAtivos")
+	@Produces("application/*")
+	public Response buscarAtivos() {
+		try {
+			List<JsonObject> listaMarcas = new ArrayList<JsonObject>();
+			
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			
+			listaMarcas = jdbcMarca.buscarAtivos();
+			
+			conec.fecharConexao();
+			return this.buildResponse(listaMarcas);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
+	
 	@POST
 	@Path("/cadastrar")
 	@Consumes("application/*")
-	public Response cadastrar(@FormParam("marca") String marcaParam) {
+	public Response cadastrar(String marcaParam) {
 		try {
 			Marca marca = new Gson().fromJson(marcaParam, Marca.class);
 			Conexao conec = new Conexao();
@@ -77,7 +97,7 @@ public class MarcaRest extends UtilRest {
 	
 	@DELETE
 	@Path("/excluir/{id}")
-	@Consumes("application/*")
+	@Produces("application/*")
 	public Response excluir(@PathParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
@@ -102,14 +122,14 @@ public class MarcaRest extends UtilRest {
 	}
 	
 	@GET
-	@Path("/existeMarca/{id}")
+	@Path("/existeMarca")
 	@Produces("application/*")
-	public Response verificarMarca(@PathParam("id") int id) {
+	public Response existeMarca(@QueryParam("id") int id) {
 		try {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			boolean marcaExistente = (jdbcMarca.buscarPorId(id) != null);
+			boolean marcaExistente = jdbcMarca.existeMarca(id);
 			
 			conec.fecharConexao();
 			return this.buildResponse(marcaExistente);
@@ -121,7 +141,6 @@ public class MarcaRest extends UtilRest {
 	
 	@GET
 	@Path("/buscarPorId")
-	@Consumes("application/*")
 	@Produces("application/*")
 	public Response buscarPorId(@QueryParam("id") int id) {
 		try {
@@ -143,7 +162,7 @@ public class MarcaRest extends UtilRest {
 	@PUT
 	@Path("/alterar")
 	@Consumes("application/*")
-	public Response alterar(@FormParam("marca") String marcaParam) {
+	public Response alterar(String marcaParam) {
 		try {
 			Marca marca = new Gson().fromJson(marcaParam, Marca.class);
 			Conexao conec = new Conexao();
@@ -167,4 +186,29 @@ public class MarcaRest extends UtilRest {
 		}
 	}
 	
+	@GET
+	@Path("/alterarStatus")
+	@Produces("application/*")
+	public Response alterarStatus(@QueryParam("id") int id, @QueryParam("status") int status) {
+		try {
+			Conexao conec = new Conexao();
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			
+			boolean retorno = jdbcMarca.alterarStatus(id, status);
+			String msg = "";
+			
+			if (retorno) {
+				msg = "Status da marca foi alterada com sucesso!";
+			} else {
+				msg = "Erro ao alterar status da marca.";
+			}
+			
+			conec.fecharConexao();
+			return this.buildResponse(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+	}
 }

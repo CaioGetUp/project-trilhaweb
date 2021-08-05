@@ -10,6 +10,8 @@ public interface MarcaDAO {
 	
 	public List<JsonObject> buscar(String valorBusca);
 	
+	public List<JsonObject> buscarAtivos();
+	
 	public boolean cadastrar(Marca marca);
 	
 	public boolean excluir(int id);
@@ -18,4 +20,7 @@ public interface MarcaDAO {
 	
 	public Marca buscarPorId(int id);
 	
+	public boolean existeMarca(int id);
+	
+	public boolean alterarStatus(int id, int status);
 }
