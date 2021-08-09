@@ -36,21 +36,20 @@ public class ProdutoRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 
-			String msg = "";
 			if (jdbcProduto.validaDuplicidade(produto, false)) {
-				msg = "Produto no qual esteja tentando inserir já possui informações similares cadastrado. (Categoria, Marca e Modelo)";
+				conec.fecharConexao();
+				
+				return this.buildErrorResponse("Produto no qual esteja tentando inserir já possui informações similares cadastrado. (Categoria, Marca e Modelo)");
 			} else {
 				boolean retorno = jdbcProduto.inserir(produto);
 				
+				conec.fecharConexao();
 				if (retorno) {
-					msg = "Produto cadastrado com sucesso!";
+					return this.buildResponse("Produto cadastrado com sucesso!");
 				} else {
-					msg = "Erro ao cadastrar produto.";
+					return this.buildErrorResponse("Erro ao cadastrar produto.");
 				}
 			}
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -85,18 +84,14 @@ public class ProdutoRest extends UtilRest {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			
 			boolean retorno = jdbcProduto.deletar(id);
-			String msg = "";
-			
-			if (retorno) {
-				msg = "Produto excluído com sucesso!";
-			} else {
-				msg = "Erro ao excluir produto.";
-			}
 			
 			conec.fecharConexao();
-			return this.buildResponse(msg);
+			if (retorno) {
+				return this.buildResponse("Produto excluído com sucesso!");
+			} else {
+				return this.buildErrorResponse("Erro ao excluir produto.");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -134,22 +129,20 @@ public class ProdutoRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 			
-			String msg = "";
 			if (jdbcProduto.validaDuplicidade(produto, true)) {
-				msg = "Não é possível alterar, pois já existe um produto com as mesmas informações!";
+				conec.fecharConexao();
+				
+				return this.buildErrorResponse("Não é possível alterar, pois já existe um produto com as mesmas informações!");
 			} else {
 				boolean retorno = jdbcProduto.alterar(produto);
+				conec.fecharConexao();
 				
 				if (retorno) {
-					msg = "Produto alterado com sucesso!";
+					return this.buildResponse("Produto alterado com sucesso!");
 				} else {
-					msg = "Erro ao alterar produto.";
+					return this.buildErrorResponse("Erro ao alterar produto.");
 				}
 			}
-			
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -167,7 +160,11 @@ public class ProdutoRest extends UtilRest {
 			boolean marcaUtilizada = jdbcProduto.buscarMarca(id);
 			
 			conec.fecharConexao();
-			return this.buildResponse(marcaUtilizada);
+			if (marcaUtilizada) {
+				return this.buildResponse(marcaUtilizada);
+			} else {
+				return this.buildErrorResponse("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());

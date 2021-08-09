@@ -19,7 +19,7 @@ $(document).ready(function() {
 				$("#addMarca").trigger("reset");
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso("Erro ao cadastrar uma nova marca: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso(info.message);
 			}
 		});
 	}
@@ -39,7 +39,7 @@ $(document).ready(function() {
 				$("#listaMarca").html(COLDIGO.marca.exibirTabela(dados));
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso("Erro ao consultar as marcas: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso("Erro ao buscar marca: " + info.status + " - " + info.statusText);
 			}
 		});
 	};
@@ -114,7 +114,7 @@ $(document).ready(function() {
 				$("#modalEditaMarca").dialog(modalEditaMarca);
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso("Erro ao buscar a marca: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso("Erro ao buscar marca especifica: " + info.status + " - " + info.statusText);
 			}
 		});
 	};
@@ -124,25 +124,21 @@ $(document).ready(function() {
 			type: "GET",
 			url: COLDIGO.PATH + "produto/marcaUtilizada",
 			data: "id=" + id,
-			success: function(data) {
-				if (Boolean.call(data)) {
-					COLDIGO.exibirAviso("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
-				} else {
-					$.ajax({
-						type: "DELETE",
-						url: COLDIGO.PATH + "marca/excluir/" + id,
-						success: function(msg) {
-							COLDIGO.exibirAviso(msg);
-							COLDIGO.marca.buscar();
-						},
-						error: function(info) {
-							COLDIGO.exibirAviso("Erro ao excluir a marca: " + info.status + " - " + info.statusText);
-						}
-					});
-				}
+			success: function() {
+				$.ajax({
+					type: "DELETE",
+					url: COLDIGO.PATH + "marca/excluir/" + id,
+					success: function(msg) {
+						COLDIGO.exibirAviso(msg);
+						COLDIGO.marca.buscar();
+					},
+					error: function(info) {
+						COLDIGO.exibirAviso(info.message);
+					}
+				});
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso("Erro buscar marca em produtos: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso(info.message);
 			}
 		});
 	};
@@ -162,7 +158,7 @@ $(document).ready(function() {
 				$("#modalEditaMarca").dialog("close");
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso("Erro ao editar a marca: " + info.status + " - " + info.statusText);
+				COLDIGO.exibirAviso(info.message);
 			}
 		});
 	};

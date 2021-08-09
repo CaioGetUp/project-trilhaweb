@@ -78,21 +78,20 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			String msg = "";
 			if (jdbcMarca.validarDuplicidade(marca, false)) {
-				msg = "Já existe uma marca registrada com este nome!";
+				conec.fecharConexao();
+				
+				return this.buildErrorResponse("Já existe uma marca registrada com este nome!");
 			} else {
 				boolean retorno = jdbcMarca.cadastrar(marca);
 
+				conec.fecharConexao();
 				if (retorno) {
-					msg = "Marca foi salva com sucesso!";
+					return this.buildResponse("Marca foi salva com sucesso!");
 				} else {
-					msg = "Erro ao cadastrar marca.";
+					return this.buildErrorResponse("Erro ao cadastrar marca.");
 				}
 			}
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -107,18 +106,14 @@ public class MarcaRest extends UtilRest {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			
 			boolean retorno = jdbcMarca.excluir(id);
-			String msg = "";
+			conec.fecharConexao();
 			
 			if (retorno) {
-				msg = "Marca foi removida com sucesso!";
+				return this.buildResponse("Marca foi removida com sucesso!");
 			} else {
-				msg = "Erro ao remover marca.";
+				return this.buildErrorResponse("Erro ao remover marca.");
 			}
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -136,7 +131,11 @@ public class MarcaRest extends UtilRest {
 			boolean marcaExistente = jdbcMarca.existeMarca(id);
 			
 			conec.fecharConexao();
-			return this.buildResponse(marcaExistente);
+			if (marcaExistente) {
+				return this.buildResponse(marcaExistente);
+			} else {
+				return this.buildErrorResponse("Marca não existe, para criar produto é necessário inserir somente marcas válidas.");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -152,7 +151,6 @@ public class MarcaRest extends UtilRest {
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			
 			marca = jdbcMarca.buscarPorId(id);
 			
 			conec.fecharConexao();
@@ -173,21 +171,20 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			String msg = "";
 			if (jdbcMarca.validarDuplicidade(marca, true)) {
-				msg = "Não foi possível alterar, já existe uma marca com o mesmo nome. ";
+				conec.fecharConexao();
+				
+				return this.buildErrorResponse("Não foi possível alterar, já existe uma marca com o mesmo nome. ");
 			} else {
 				boolean retorno = jdbcMarca.alterar(marca);
+				conec.fecharConexao();
 				
 				if (retorno) {
-					msg = "Marca foi alterada com sucesso!";
+					return this.buildResponse("Marca foi alterada com sucesso!");
 				} else {
-					msg = "Erro ao alterar marca.";
+					return this.buildErrorResponse("Erro ao alterar marca.");
 				}
 			}
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -203,21 +200,20 @@ public class MarcaRest extends UtilRest {
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			String msg = "";
 			if (jdbcMarca.validarDuplicidade(jdbcMarca.buscarPorId(id), true)) {
+				conec.fecharConexao();
+				
 				return this.buildErrorResponse("Não foi possível alterar o status, já existe marca com o mesmo nome ativa, para poder ativar exclua marca com o mesmo nome");
 			} else {
 				boolean retorno = jdbcMarca.alterarStatus(id, status);
 				
+				conec.fecharConexao();
 				if (retorno) {
-					msg = "Status da marca foi alterada com sucesso!";
+					return this.buildResponse("Status da marca foi alterada com sucesso!");
 				} else {
-					msg = "Erro ao alterar status da marca.";
+					return this.buildErrorResponse("Erro ao alterar status da marca.");
 				}
 			}
-			
-			conec.fecharConexao();
-			return this.buildResponse(msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
