@@ -88,12 +88,14 @@ $(document).ready(function() {
 							$("#addProduto").trigger("reset");
 						},
 						error: function(info) {
-							COLDIGO.exibirAviso(info.message);
+							COLDIGO.exibirAviso(info.responseText);
 						}
 					});
 				},
 				error: function(info) {
-					COLDIGO.exibirAviso(info.message);
+					COLDIGO.exibirAviso(info.responseText);
+					$("#selMarca").children().remove();
+					COLDIGO.produto.carregarMarcas();
 				}
 			});
 		} else {
@@ -193,7 +195,7 @@ $(document).ready(function() {
 				COLDIGO.produto.buscar();
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso(info.message);
+				COLDIGO.exibirAviso(info.responseText);
 			}
 		});
 	};
@@ -234,9 +236,6 @@ $(document).ready(function() {
 						"Cancelar": function() {
 							$(this).dialog("close");							
 						}
-					},
-					close: function() {
-						
 					}
 				};
 				
@@ -271,7 +270,7 @@ $(document).ready(function() {
 					$("#modalEditaProduto").dialog("close");
 				},
 				error: function(info) {
-					COLDIGO.exibirAviso(info.message);
+					COLDIGO.exibirAviso(info.responseText);
 				}
 			});
 		} else {

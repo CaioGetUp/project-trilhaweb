@@ -16,12 +16,13 @@ $(document).ready(function() {
 			success: function(msg) {
 				COLDIGO.exibirAviso(msg);
 				COLDIGO.marca.buscar();
-				$("#addMarca").trigger("reset");
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso(info.message);
+				COLDIGO.exibirAviso(info.responseText);
 			}
 		});
+		
+		$("#addMarca").trigger("reset");
 	}
 	
 	COLDIGO.marca.buscar = function() {
@@ -133,12 +134,12 @@ $(document).ready(function() {
 						COLDIGO.marca.buscar();
 					},
 					error: function(info) {
-						COLDIGO.exibirAviso(info.message);
+						COLDIGO.exibirAviso(info.responseText);
 					}
 				});
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso(info.message);
+				COLDIGO.exibirAviso(info.responseText);
 			}
 		});
 	};
@@ -155,12 +156,13 @@ $(document).ready(function() {
 			success: function(msg) {
 				COLDIGO.exibirAviso(msg);
 				COLDIGO.marca.buscar();
-				$("#modalEditaMarca").dialog("close");
 			},
 			error: function(info) {
-				COLDIGO.exibirAviso(info.message);
+				COLDIGO.exibirAviso(info.responseText);
 			}
 		});
+		
+		$("#modalEditaMarca").dialog("close");
 	};
 	
 	COLDIGO.marca.alterarStatus = function(id, checkbox) {
@@ -174,8 +176,8 @@ $(document).ready(function() {
 				COLDIGO.exibirAviso(msg);
 			},
 			error: function(info) {
-				checkbox.checked=!checkbox.checked;
-				COLDIGO.exibirAviso(info.message);
+				checkbox.checked = !checkbox.checked;
+				COLDIGO.exibirAviso(info.responseText);
 			}
 		});
 	};

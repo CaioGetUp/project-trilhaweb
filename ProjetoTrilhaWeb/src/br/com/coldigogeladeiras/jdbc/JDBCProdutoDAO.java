@@ -179,8 +179,8 @@ public class JDBCProdutoDAO implements ProdutoDAO {
 				if (alterar) {
 					comando += "id <> " + produto.getId();
 				}
-				comando += " LOWER(categoria) LIKE " + produto.getCategoria().toLowerCase()
-							+ " AND LOWER(categoria) LIKE " + produto.getModelo().toLowerCase()
+				comando += " categoria = " + produto.getCategoria().toLowerCase()
+							+ " AND LOWER(modelo) = '" + produto.getModelo().toLowerCase() + "' "
 							+ " AND marcas_id = " + produto.getMarcaId();
 		
 		try {

@@ -161,9 +161,9 @@ public class ProdutoRest extends UtilRest {
 			
 			conec.fecharConexao();
 			if (marcaUtilizada) {
-				return this.buildResponse(marcaUtilizada);
-			} else {
 				return this.buildErrorResponse("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
+			} else {
+				return this.buildResponse(marcaUtilizada);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

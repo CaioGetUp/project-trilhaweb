@@ -182,9 +182,9 @@ public class JDBCMarcaDAO implements MarcaDAO {
 	public boolean validarDuplicidade(Marca marca, boolean alterar) {
 		String comando = "SELECT * FROM marcas WHERE ";
 				if (alterar) {
-					comando +=  "id <> " + marca.getId();
+					comando +=  " id <> " + marca.getId();
 				}
-				comando += " LOWER(nome) LIKE " + marca.getNome().toLowerCase() + " AND status = 1";
+				comando += " AND LOWER(nome) = '" + marca.getNome().toLowerCase() + "' ";
 					
 		try {
 			Statement stmt = conexao.createStatement();
