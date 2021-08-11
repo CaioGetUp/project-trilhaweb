@@ -81,7 +81,7 @@ public class MarcaRest extends UtilRest {
 			if (jdbcMarca.validarDuplicidade(marca, false)) {
 				conec.fecharConexao();
 				
-				return this.buildErrorResponse("JÃ¡ existe uma marca registrada com este nome!");
+				return this.buildErrorResponse("Já existe uma marca registrada com este nome!");
 			} else {
 				boolean retorno = jdbcMarca.cadastrar(marca);
 

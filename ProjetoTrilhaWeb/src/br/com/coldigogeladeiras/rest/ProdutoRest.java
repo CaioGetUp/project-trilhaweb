@@ -39,7 +39,7 @@ public class ProdutoRest extends UtilRest {
 			if (jdbcProduto.validaDuplicidade(produto, false)) {
 				conec.fecharConexao();
 				
-				return this.buildErrorResponse("Produto no qual esteja tentando inserir já possui informações similares cadastrado. (Categoria, Marca e Modelo)");
+				return this.buildErrorResponse("Produto no qual esteja tentando inserir, j� possui informa��es similares cadastrado em outro produto. (Categoria, Marca e Modelo)");
 			} else {
 				boolean retorno = jdbcProduto.inserir(produto);
 				
@@ -161,7 +161,7 @@ public class ProdutoRest extends UtilRest {
 			
 			conec.fecharConexao();
 			if (marcaUtilizada) {
-				return this.buildErrorResponse("Existe um ou mais produtos atrelados a está marca. Para remover a marca exclua o produto vínculado na mesma.");
+				return this.buildErrorResponse("Existe um ou mais produtos atrelados nesta marca. Para remover a marca exclua o produto vínculado na mesma.");
 			} else {
 				return this.buildResponse(marcaUtilizada);
 			}

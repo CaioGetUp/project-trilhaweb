@@ -74,7 +74,7 @@ $(document).ready(function() {
 					"</tr>";
 			}
 		} else if (listaDeMarcas == "") {
-			tabela += "<tr><td colspan='2'>Nenhum registro encontrado</td></tr>";
+			tabela += "<tr><td colspan='3'>Nenhum registro encontrado</td></tr>";
 		}
 		
 		tabela += "</table>";
